@@ -121,7 +121,7 @@ export function CoverDraftButton({ n, company }: { n: string; company: string })
             </select>
           </label>
           <div className="flex flex-wrap items-center gap-2">
-            <button type="submit" className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1.5 text-xs font-medium text-brand-foreground shadow-sm transition-colors hover:bg-brand-200 max-sm:min-h-[44px]">
+            <button type="submit" className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1.5 text-xs font-medium text-brand-foreground shadow-sm transition-colors hover:bg-brand-hover max-sm:min-h-[44px]">
               <Mail className="size-3.5" /> Draft letter
             </button>
             <CostBadge kind="spend" size="xs" />

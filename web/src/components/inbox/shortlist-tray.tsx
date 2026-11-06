@@ -93,7 +93,7 @@ export function ShortlistTray({
                 <button
                   type="button"
                   onClick={() => setConfirming(true)}
-                  className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 max-sm:min-h-[44px]"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover max-sm:min-h-[44px]"
                 >
                   <Sparkles className="size-4" />
                   <span>Score {n}</span>
@@ -150,7 +150,7 @@ function ConfirmScore({
       <button
         type="button"
         onClick={onConfirm}
-        className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 max-sm:min-h-[44px]"
+        className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover max-sm:min-h-[44px]"
       >
         Score {n} now
       </button>

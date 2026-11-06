@@ -26,7 +26,15 @@ type StatsMetrics = {
   payHistogram: { label: string; count: number; pct: number }[];
 };
 
-const BAR_TONES = ["bg-brand", "bg-sky-400", "bg-emerald-400", "bg-yellow-300", "bg-orange-300", "bg-pink-400"];
+// Ordered measures (score buckets, pay bands) read as one warm ramp off the
+// accent: intensity carries the ordering. The previous six-hue rainbow
+// (brand/sky/emerald/yellow/orange/pink) fought the rust accent — a cyan bar
+// beside a rust button looks like two products sharing a page.
+const BAR_TONES = ["bg-brand/35", "bg-brand/50", "bg-brand/65", "bg-brand/80", "bg-brand"];
+// Categorical splits (archetypes, status mix) need hues a reader can tell apart,
+// so they get distinguishable tones picked to sit beside rust rather than
+// against it. No second orange: this palette has exactly one.
+const CATEGORICAL_TONES = ["bg-brand", "bg-teal-600", "bg-slate-400", "bg-amber-500", "bg-rose-400", "bg-lime-600"];
 
 export function AnalyticsShell({ total, view, children }: {
   total: number;
@@ -96,7 +104,7 @@ export function ProgressPanel({ metrics }: { metrics: ProgressMetrics }) {
         <Panel eyebrow="Funnel" title="Pipeline progress" description="Cumulative roles that reached each stage.">
           <div className="mt-5 space-y-3.5">
             {metrics.funnel.map((stage, index) => (
-              <BarRow key={stage.label} label={stage.label} count={stage.count} pct={stage.pct} widthPct={metrics.tracked ? (stage.count / metrics.tracked) * 100 : 0} tone={index === metrics.funnel.length - 1 ? "bg-brand" : "bg-sky-400"} />
+              <BarRow key={stage.label} label={stage.label} count={stage.count} pct={stage.pct} widthPct={metrics.tracked ? (stage.count / metrics.tracked) * 100 : 0} tone={index === metrics.funnel.length - 1 ? "bg-brand" : "bg-brand/55"} />
             ))}
           </div>
         </Panel>
@@ -123,7 +131,7 @@ export function ProgressPanel({ metrics }: { metrics: ProgressMetrics }) {
           {metrics.weeklyActivity.length ? (
             <div className="mt-5 space-y-3">
               {metrics.weeklyActivity.map((week) => {
-                return <BarRow key={week.week} label={week.week} count={week.count} widthPct={(week.count / maxWeeklyActivity) * 100} tone="bg-sky-400" />;
+                return <BarRow key={week.week} label={week.week} count={week.count} widthPct={(week.count / maxWeeklyActivity) * 100} tone="bg-brand/70" />;
               })}
             </div>
           ) : <EmptyData label="No dated activity yet" detail="Weekly activity will appear once evaluations have valid dates." />}
@@ -152,7 +160,7 @@ export function StatsPanel({ metrics, insights }: { metrics: StatsMetrics; insig
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)]">
         <Panel eyebrow="Archetypes" title="Where the search is pointed" description="Canonical role families, ranked by volume and annotated with fit.">
-          {metrics.archetypes.length ? <div className="mt-4 space-y-3">{metrics.archetypes.map((row, index) => <div key={row.label} className="grid grid-cols-[minmax(0,1fr)_minmax(100px,0.8fr)_auto] items-center gap-3 text-sm"><div className="min-w-0"><div className="break-words text-foreground">{row.label}</div><div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-hover"><div className={`h-full rounded-full ${BAR_TONES[index % BAR_TONES.length]}`} style={{ width: `${Math.max(row.pct, row.count ? 3 : 0)}%` }} /></div></div><div className="text-right text-xs text-muted tabular-nums">{row.count} <span className="text-faint">({Math.round(row.pct)}%)</span></div><div className="min-w-14 text-right text-xs font-semibold tabular-nums text-brand-text">{row.avgScore ? `★ ${row.avgScore.toFixed(1)}` : "—"}</div></div>)}</div> : <EmptyData label="No archetype data" detail="Reports with archetype metadata will populate this view." />}
+          {metrics.archetypes.length ? <div className="mt-4 space-y-3">{metrics.archetypes.map((row, index) => <div key={row.label} className="grid grid-cols-[minmax(0,1fr)_minmax(100px,0.8fr)_auto] items-center gap-3 text-sm"><div className="min-w-0"><div className="break-words text-foreground">{row.label}</div><div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-hover"><div className={`h-full rounded-full ${CATEGORICAL_TONES[index % CATEGORICAL_TONES.length]}`} style={{ width: `${Math.max(row.pct, row.count ? 3 : 0)}%` }} /></div></div><div className="text-right text-xs text-muted tabular-nums">{row.count} <span className="text-faint">({Math.round(row.pct)}%)</span></div><div className="min-w-14 text-right text-xs font-semibold tabular-nums text-brand-text">{row.avgScore ? `★ ${row.avgScore.toFixed(1)}` : "—"}</div></div>)}</div> : <EmptyData label="No archetype data" detail="Reports with archetype metadata will populate this view." />}
         </Panel>
         <Panel eyebrow="Seniority" title="Role mix" icon={<BriefcaseBusiness className="size-4" />}>
           <Distribution rows={metrics.seniorityMix} emptyLabel="No role seniority data" />
@@ -204,7 +212,7 @@ function BarRow({ label, count, pct, widthPct, tone }: { label: string; count: n
 
 function Distribution({ rows, emptyLabel = "No distribution data" }: { rows: { label: string; count: number; pct: number }[]; emptyLabel?: string }) {
   if (!rows.length) return <EmptyData label={emptyLabel} detail="More evaluated roles are needed to show this breakdown." />;
-  return <div className="mt-5"><div className="flex h-3 overflow-hidden rounded-full bg-surface-hover" aria-hidden="true">{rows.map((row, index) => <div key={row.label} className={BAR_TONES[index % BAR_TONES.length]} style={{ width: `${row.pct}%` }} />)}</div><div className="mt-4 grid gap-2 sm:grid-cols-2">{rows.map((row, index) => <div key={row.label} className="flex items-center gap-2 text-xs"><span className={`size-2 rounded-full ${BAR_TONES[index % BAR_TONES.length]}`} aria-hidden="true" /><span className="min-w-0 flex-1 truncate text-muted">{row.label}</span><span className="font-mono tabular-nums text-foreground">{row.count} <span className="text-faint">({Math.round(row.pct)}%)</span></span></div>)}</div></div>;
+  return <div className="mt-5"><div className="flex h-3 overflow-hidden rounded-full bg-surface-hover" aria-hidden="true">{rows.map((row, index) => <div key={row.label} className={CATEGORICAL_TONES[index % CATEGORICAL_TONES.length]} style={{ width: `${row.pct}%` }} />)}</div><div className="mt-4 grid gap-2 sm:grid-cols-2">{rows.map((row, index) => <div key={row.label} className="flex items-center gap-2 text-xs"><span className={`size-2 rounded-full ${CATEGORICAL_TONES[index % CATEGORICAL_TONES.length]}`} aria-hidden="true" /><span className="min-w-0 flex-1 truncate text-muted">{row.label}</span><span className="font-mono tabular-nums text-foreground">{row.count} <span className="text-faint">({Math.round(row.pct)}%)</span></span></div>)}</div></div>;
 }
 
 function BreakdownList({ rows, icon, emptyLabel }: { rows: { label: string; count: number; pct: number }[]; icon: React.ReactNode; emptyLabel: string }) {

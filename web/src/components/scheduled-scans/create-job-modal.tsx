@@ -150,7 +150,7 @@ export function CreateJobModal({
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2 text-xs font-medium text-brand-foreground shadow transition-colors hover:bg-brand-200 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2 text-xs font-medium text-brand-foreground shadow transition-colors hover:bg-brand-hover disabled:opacity-50"
             >
               {submitting ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
               {submitting ? "Creating…" : "Save Scheduled Scan"}

@@ -90,7 +90,7 @@ export function OnboardingBanner() {
         <button
           disabled={cli === null}
           onClick={() => window.dispatchEvent(new CustomEvent("co-assistant", { detail: { message: kickoff } }))}
-          className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 disabled:cursor-wait disabled:opacity-60"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-wait disabled:opacity-60"
         >
           <Sparkles className="size-4" /> Set me up with the assistant
         </button>
@@ -99,7 +99,7 @@ export function OnboardingBanner() {
         // drop. Send them to connect one first.
         <Link
           href="/config"
-          className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover"
         >
           <Settings className="size-4" /> Connect your AI CLI to get started
         </Link>

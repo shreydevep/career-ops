@@ -970,7 +970,7 @@ export function AssistantConsole() {
                   void send();
                 }}
                 disabled={busy || chatPending || !chatReady || !input.trim() || !cliId}
-                className="rounded-xl bg-brand p-2 text-brand-foreground transition-colors hover:bg-brand-200 disabled:opacity-40"
+                className="rounded-xl bg-brand p-2 text-brand-foreground transition-colors hover:bg-brand-hover disabled:opacity-40"
                 aria-label="Send"
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
@@ -1114,7 +1114,7 @@ function ConfirmationCard({ part, onConfirm }: {
           <button
             aria-label={`Confirm: ${part.summary}`}
             onClick={(e) => decide(e.currentTarget, true)}
-            className="rounded-full bg-brand px-3 py-1 text-xs font-medium text-brand-foreground transition-colors hover:bg-brand-200"
+            className="rounded-full bg-brand px-3 py-1 text-xs font-medium text-brand-foreground transition-colors hover:bg-brand-hover"
           >
             Confirm
           </button>

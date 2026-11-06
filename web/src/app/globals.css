@@ -10,18 +10,30 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Design tokens — inherited from career-ops-docs. Brand burnt-orange #dd7627
-   (mode-invariant), zinc neutrals, light + dark (Fumadocs neutral values).
+   Design tokens — inherited from career-ops-docs, accent retuned to burnt clay.
+
+   The accent used to be #dd7627, a saturated pumpkin (73% sat at 51% lightness).
+   On the warm paper background it read as safety-orange: it vibrated against
+   #f7f6f3, its 12% tint made every soft panel look peach, and its #ffa333 hover
+   went *brighter* still. The replacement keeps the warm hue family — this is a
+   retune, not a rebrand — but drops the hue toward rust (26° → 16°), takes
+   saturation down (73% → 66%) and darkens the fill (51% → 45%), which is what
+   lets the button carry white text instead of near-black.
+
+   Mode-invariant fill, zinc neutrals, light + dark (Fumadocs neutral values).
    ────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-brand: hsl(26 73% 51%);
-  --color-brand-200: hsl(33 100% 60%); /* hover / lighter */
-  /* Near-black on the brand orange: 5.2:1 on brand, 8.3:1 on brand-200 hover
-     (white was 3.14:1, an AA fail in BOTH themes since the button is the same).
-     The brand orange itself is untouched — only what sits on top of it. */
-  --color-brand-foreground: hsl(24 30% 12%);
-  --color-brand-soft: hsl(26 73% 51% / 0.12);
-  --color-brand-secondary: #fc7744;
+  /* Carries WHITE text: 4.84:1 on brand, 5.99:1 on the hover step. */
+  --color-brand: hsl(16 66% 45%);
+  /* Hover DEEPENS instead of brightening — the old neon #ffa333 hover was the
+     loudest thing on the page. Contrast rises with it (5.99:1), so the state
+     stays legible in both themes. */
+  --color-brand-hover: hsl(16 70% 39%);
+  /* Light companion, for gradients only (route bar). Not a hover. */
+  --color-brand-200: hsl(18 68% 62%);
+  --color-brand-foreground: #ffffff;
+  --color-brand-soft: hsl(16 66% 45% / 0.10);
+  --color-brand-secondary: hsl(14 68% 58%);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
@@ -39,10 +51,11 @@
   --color-muted: var(--muted);
   --color-faint: var(--faint);
   --color-landing: var(--landing); /* editorial olive (light) / cream (dark) — docs landing-foreground */
-  /* Brand as SMALL TEXT: the raw orange only passes AA in dark (4.95); in light
-     it's 2.6-3.1 on cream/white. brand-text darkens it for light and keeps the
-     raw brand in dark. Every text color (text-*, CSS color) uses brand-text;
-     brand stays for fills, borders, rings and gradients. */
+  /* Brand as SMALL TEXT: the raw fill is a background colour, not a text one
+     (4.84:1 on white but only 4.15:1 on surface-hover, and 3.74:1 in dark).
+     Every text-* / CSS color use goes through brand-text: darkened rust in
+     light (7.11:1 on bg), a lighter tint in dark (7.66:1 on #0a0a0a). The fill
+     stays for backgrounds, borders, rings and gradients. */
   --color-brand-text: var(--brand-text);
 }
 
@@ -55,7 +68,7 @@
   --muted: hsl(35 9% 34%); /* darker than before for readable body text */
   --faint: hsl(35 7% 42%); /* AA: ~4.6:1 on #fff (was 50% ≈ 3.9:1, failed small text) */
   --landing: #59592a; /* olive editorial headline */
-  --brand-text: hsl(26 80% 36%); /* darkened brand for small text: 5.5 white / 5.1 cream / 4.7 surface-hover */
+  --brand-text: hsl(16 68% 33%); /* darkened clay for small text: 7.11 bg / 7.68 surface / 6.62 hover */
   --dot: 40 8% 42% / 0.09;
   --pre-bg: #f2f1ed;
   color-scheme: light;
@@ -71,7 +84,7 @@
     --muted: #a1a1aa;
     --faint: #8b8b95; /* AA: ~4.6:1 on #161616 (was #71717a ≈ 3.7:1, failed small text) */
     --landing: #e4e2d0; /* cream editorial headline */
-    --brand-text: hsl(26 73% 51%); /* raw brand already passes in dark (≥4.95 on bg/surface) */
+    --brand-text: hsl(20 72% 63%); /* the fill is too dark to be text here (3.7:1): a lighter clay reads at 7.66 on bg / 7.00 on surface */
     --dot: 240 5% 65% / 0.10;
     --pre-bg: #111111;
     color-scheme: dark;

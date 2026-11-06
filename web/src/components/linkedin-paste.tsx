@@ -67,7 +67,7 @@ export function LinkedInPaste() {
           type="button"
           onClick={() => void submit(text)}
           disabled={busy || !text.trim()}
-          className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 disabled:opacity-50"
+          className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover disabled:opacity-50"
         >
           {busy ? "Adding…" : "Add these jobs"}
         </button>

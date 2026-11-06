@@ -169,7 +169,7 @@ export function EditJobModal({
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2 text-xs font-medium text-brand-foreground shadow transition-colors hover:bg-brand-200 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2 text-xs font-medium text-brand-foreground shadow transition-colors hover:bg-brand-hover disabled:opacity-50"
             >
               {submitting ? <Loader2 className="size-4 animate-spin" /> : <Edit3 className="size-4" />}
               {submitting ? "Saving…" : "Save Changes"}

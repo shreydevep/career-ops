@@ -139,7 +139,7 @@ export function NextDateDialog({
             <button
               type="submit"
               disabled={busy !== null}
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 disabled:pointer-events-none disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover disabled:pointer-events-none disabled:opacity-60"
             >
               {busy === "set" ? <Loader2 className="size-3.5 animate-spin" /> : <Pin className="size-3.5" />} Pin date
             </button>

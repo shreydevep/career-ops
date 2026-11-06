@@ -45,7 +45,7 @@ export function QuickEvaluate() {
         />
         <button
           onClick={run}
-          className="shrink-0 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200"
+          className="shrink-0 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-hover"
         >
           Evaluate
         </button>

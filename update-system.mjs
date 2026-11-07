@@ -351,8 +351,6 @@ export const USER_PATHS = [
   'config/plugins.yml',
   'plugins.local/',
   'plugins.lock',
-  // Fork-owned workflow doc (see FORK.md). Never shipped by the updater.
-  'FORK.md',
   'opencode.json',
   '.claude/settings.json',
   '.claude/hooks/',

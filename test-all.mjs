@@ -14103,7 +14103,7 @@ try {
   // its launch directory, not --target, so this runs from the empty fixture:
   // run()'s default cwd is the checkout, whose own .mcp.json would answer.
   const noMcp = mkdtempSync(join(tmpdir(), 'co-nomcp-'));
-  const a = JSON.parse(run(NODE, [join(ROOT, 'doctor.mjs'), '--json', '--target', noMcp], { ...doctorEnv, cwd: noMcp }) || '{}');
+  const a = JSON.parse(run(NODE, [join(ROOT, 'doctor.mjs'), '--json', '--cli', 'claude', '--target', noMcp], { ...doctorEnv, cwd: noMcp }) || '{}');
   if (Array.isArray(a.warnings) && a.warnings.some((w) => /playwright mcp/i.test(w))) {
     pass('No Playwright MCP config → warning surfaced');
   } else {
@@ -14120,7 +14120,7 @@ try {
   );
   const b = JSON.parse(execFileSync(
     NODE,
-    [join(ROOT, 'doctor.mjs'), '--json', '--target', withMcp],
+    [join(ROOT, 'doctor.mjs'), '--json', '--cli', 'claude', '--target', withMcp],
     { ...doctorEnv, cwd: withMcp, encoding: 'utf8' },
   ) || '{}');
   if (Array.isArray(b.warnings) && !b.warnings.some((w) => /playwright mcp/i.test(w))) {
@@ -14139,7 +14139,7 @@ try {
   );
   const c = JSON.parse(execFileSync(
     NODE,
-    [join(ROOT, 'doctor.mjs'), '--json', '--target', withLocalMcp],
+    [join(ROOT, 'doctor.mjs'), '--json', '--cli', 'claude', '--target', withLocalMcp],
     { ...doctorEnv, cwd: withLocalMcp, encoding: 'utf8' },
   ) || '{}');
   if (Array.isArray(c.warnings) && !c.warnings.some((w) => /playwright mcp/i.test(w))) {

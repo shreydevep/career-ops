@@ -65,6 +65,18 @@ const RETRY_POLICY = { retries: 3 };
 // page 1 pay this; no-date-skip and early-stopped tenants never do.
 const INTER_PAGE_DELAY_MS = 250;
 
+// Workday rate-limits by answering HTTP 200 with an EMPTY BOARD
+// (`{"total":0,"jobPostings":[]}`) instead of 429, so a throttled tenant is
+// indistinguishable from one that genuinely has no postings. Measured
+// 2026-11-07 against real tenants: under five concurrent workers, Nvidia,
+// Visa and Wells Fargo each answered total:0, and the same request run
+// seconds later returned 204, 87 and 69 Bengaluru postings. The retired
+// zero is the dangerous shape — it is a clean success object that a scan
+// records as "no openings here" and never revisits. One delayed second ask
+// on an empty root query converts that silent miss into a real answer, at
+// the cost of a single extra request for tenants that really are empty.
+const EMPTY_BOARD_RETRY_MS = 1500;
+
 // Offset past which some tenants' CXS backend stops paginating: it reports
 // `total` as exactly 2000 and answers offset=2000/4000 with the same postings
 // as offset=0. Raising max_pages buys duplicates, not coverage — see the facet
@@ -882,7 +894,22 @@ export default {
      */
     const runQuery = async (appliedFacets) => {
       pagesSpent++;
-      const first = await fetchJsonWithRetry(ctx, ep.api, { ...postOpts, body: makeBody(0, appliedFacets) }, RETRY_POLICY);
+      let first = await fetchJsonWithRetry(ctx, ep.api, { ...postOpts, body: makeBody(0, appliedFacets) }, RETRY_POLICY);
+
+      // An empty ROOT query is the one result worth double-checking: Workday
+      // emits it while throttling, and believing it hides the tenant's entire
+      // board. Skipped in probe mode (ctx capped): verify-portals fires a
+      // second-request sentinel that fetchJsonWithRetry would retry noisily,
+      // and a probe only needs to know the board answers at all.
+      const isEmptyBoard = (json) =>
+        Boolean(json) && json.total === 0
+        && Array.isArray(json.jobPostings) && json.jobPostings.length === 0;
+      if (ctxCap === Infinity && Object.keys(appliedFacets).length === 0 && isEmptyBoard(first)) {
+        await sleep(EMPTY_BOARD_RETRY_MS, ctx);
+        const retried = await fetchJsonWithRetry(ctx, ep.api, { ...postOpts, body: makeBody(0, appliedFacets) }, RETRY_POLICY);
+        if (!isEmptyBoard(retried)) first = retried;
+      }
+
       const jobs = parseWorkdayResponse(first, entry);
 
       const total = typeof first?.total === 'number' ? first.total : null;
